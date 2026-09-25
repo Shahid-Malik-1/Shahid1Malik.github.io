@@ -19,6 +19,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="portfolio.css">
   <script src="portfolio.js" defer></script>
+  <script src="robot-scene.js" defer></script>
 </head>
 <body id="top">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -32,22 +33,24 @@
     </nav>
   </header>
   <main id="main">
-    <section class="hero shell" aria-labelledby="hero-title">
+    <section class="hero shell robot-hero" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <p class="eyebrow"><span class="status-dot"></span> ROBOTICS / COMPUTER VISION ENGINEER</p>
-        <h1 id="hero-title">Shahid<br>Malik<span class="name-dot">.</span></h1><p class="hero-specialism">Perception. Reconstruction.<br><span>Robot simulation.</span></p>
-        <p class="hero-intro">I build systems that connect cameras, LiDAR, 3D geometry, and learning—from sensor calibration to reconstructed environments and repeatable robotics experiments.</p>
+        <p class="eyebrow"><span class="status-dot"></span> SHAHID MALIK / ROBOTICS & COMPUTER VISION</p>
+        <h1 id="hero-title">Robotics in<br>the <span>real world.</span></h1>
+        <p class="hero-specialism">Perception. Reconstruction. Simulation.</p>
+        <p class="hero-intro">I work on how robots see and how we represent their world—connecting cameras, LiDAR, 3D geometry, and learning.</p>
         <p class="current-line"><span class="status-dot"></span> CURRENTLY AT <a href="#current">FIELD AI <span aria-hidden="true">↗</span></a></p>
-        <div class="hero-actions"><a class="button button-dark" href="#work">View engineering projects <span aria-hidden="true">↘</span></a><a class="text-link" href="#workbench">Try the workbench <span aria-hidden="true">↗</span></a></div>
-        <div class="hero-footnote"><span class="mono">SENSORS → GEOMETRY → SIMULATION</span><span>Camera–LiDAR calibration / Gaussian splatting / GPU workflows</span></div>
+        <div class="hero-actions"><a class="button button-dark" href="#work">Explore my work <span aria-hidden="true">↘</span></a><a class="text-link" href="#workbench">Sensor workbench <span aria-hidden="true">↗</span></a></div>
+        <div class="hero-footnote"><span class="mono">FROM SENSOR MEASUREMENTS TO SPATIAL UNDERSTANDING</span><span>Camera–LiDAR calibration / 3D reconstruction / Gaussian splatting</span></div>
       </div>
-      <div class="scene-panel">
-        <div class="scene-top"><span class="scene-label"><span class="status-dot"></span> SCENE REPRESENTATION</span><span class="mono">XYZ / 3D</span></div>
-        <canvas id="spatial-canvas" role="img" aria-label="Illustrative 3D point cloud of a room. Drag to rotate, or use the view controls below."></canvas>
-        <div class="scene-fallback" id="scene-fallback" hidden>Geometry is the language between sensors and the world.</div>
-        <div class="scene-caption"><span><span class="mono">INTERACTIVE / 3D</span><br><strong>Geometry, through a sensor’s lens.</strong></span><span class="scene-hint">DRAG TO EXPLORE <span aria-hidden="true">↔</span></span></div>
-        <div class="scene-controls" aria-label="Illustrative scene controls"><div class="segmented"><button data-scene="points" aria-pressed="true">Point cloud</button><button data-scene="depth" aria-pressed="false">Depth</button></div><button id="scene-motion" aria-pressed="false" aria-label="Pause scene rotation">Pause <span aria-hidden="true">Ⅱ</span></button><button id="scene-reset" aria-label="Reset scene viewpoint">Reset ↺</button></div>
-        <p class="scene-disclaimer">Synthetic point-cloud study · drag or use arrow keys to orbit</p>
+      <div class="scene-panel robot-stage">
+        <div class="scene-top"><span class="scene-label"><span class="status-dot"></span> EMBODIED SYSTEMS</span><span class="mono">INTERACTIVE / 3D</span></div>
+        <canvas id="spatial-canvas" role="img" aria-label="Illustrative articulated quadruped and humanoid robots. Drag or use arrow keys to rotate the view."></canvas>
+        <div class="scene-fallback" id="scene-fallback" hidden>Quadrupeds. Humanoids.<br>Perception for physical systems.</div>
+        <div class="robot-selector" role="group" aria-label="Choose robot models"><button data-robot="both" aria-pressed="true">Both</button><button data-robot="quadruped" aria-pressed="false">Quadruped</button><button data-robot="humanoid" aria-pressed="false">Humanoid</button></div>
+        <div class="scene-caption"><span><span class="mono">QUADRUPED × HUMANOID</span><br><strong>Different bodies. A shared world.</strong></span><span class="scene-hint">DRAG TO ORBIT ↔</span></div>
+        <div class="scene-controls" aria-label="Robot visualization controls"><div class="segmented"><button data-scene="solid" aria-pressed="true">Robot</button><button data-scene="points" aria-pressed="false">Points</button><button data-scene="depth" aria-pressed="false">Depth</button></div><button id="scene-sensors" aria-pressed="false">Sensors</button><button id="scene-motion" aria-pressed="false" aria-label="Pause robot animation">Pause Ⅱ</button><button id="scene-reset" aria-label="Reset robot viewpoint">↺</button></div>
+        <p class="scene-disclaimer">Illustrative robot models and gait · not Field AI hardware or control software</p>
       </div>
     </section>
     <div class="specialties shell" aria-label="Areas of focus"><span>ENGINEERING FOCUS</span><p>Sensor calibration <i>↗</i> 3D reconstruction <i>↗</i> Gaussian splatting <i>↗</i> Simulation</p></div>

@@ -18,14 +18,16 @@ Open http://127.0.0.1:8765. No build or npm dependencies are required.
 
 - `index.html`: content, metadata, project links, experience and publications.
 - `portfolio.css`: responsive layout, typography, media viewer and motion preferences.
-- `portfolio.js`: project filters, media dialog, gallery, procedural 3D scene and
-  a camera–LiDAR calibration workbench.
+- `portfolio.js`: project filters, media dialog, gallery and camera–LiDAR workbench.
+- `robot-scene.js`: original articulated quadruped/humanoid visualization with
+  solid, points and depth views, sensor frustums, orbit and gait controls.
 - `assets/portfolio/`: compressed WebP previews of existing portfolio images.
 - Existing root photos, videos and PDFs: full-size media and downloadable documents.
 
 Keep original media alongside the new files: the lightbox opens full-size images
-and videos on demand. The site does not preload the video library. The procedural
-hero is illustrative geometry, not a Field AI scene or measured reconstruction.
+and videos on demand. The site does not preload the video library. The robot
+hero uses original illustrative geometry and gait, not Field AI hardware,
+proprietary assets, or a deployed control algorithm.
 Its animation stops offscreen and honors reduced-motion preferences.
 
 ## Content updates
