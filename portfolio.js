@@ -123,7 +123,7 @@ if ('IntersectionObserver' in window) {
       });
     });
   }, { rootMargin: '-15% 0px -55% 0px', threshold: 0 });
-  ['current', 'work', 'about', 'research', 'contact'].forEach((id) => navObserver.observe(document.getElementById(id)));
+  ['current', 'work', 'workbench', 'about', 'research', 'contact'].forEach((id) => navObserver.observe(document.getElementById(id)));
   const reveal = new IntersectionObserver((entries) => entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
     if (!motionPreference.matches) entry.target.animate([{ opacity: .2, transform: 'translateY(14px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 550, easing: 'ease-out' });
@@ -178,7 +178,7 @@ if ('IntersectionObserver' in window) {
   }
   function draw() {
     ctx.clearRect(0, 0, width, height);
-    ctx.strokeStyle = '#9bcca512'; ctx.lineWidth = .6;
+    ctx.strokeStyle = '#6db5ed18'; ctx.lineWidth = .6;
     for (let x = -5; x <= 5; x++) { const a = project(x, 0, -3.7), b = project(x, 0, 3.7); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
     for (let z = -3; z <= 3; z++) { const a = project(-5, 0, z), b = project(5, 0, z); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
     const projected = points.map((p) => ({ ...project(p.x, p.y, p.z), kind: p.kind, lum: p.lum, elevation: p.y })).sort((a, b) => b.depth - a.depth);
@@ -186,7 +186,7 @@ if ('IntersectionObserver' in window) {
       if (p.y < 65 || p.y > height - 150) continue;
       const alpha = (p.kind === 0 ? .23 : .58) + p.lum * .28;
       if (mode === 'depth') { const hue = 32 + ((p.depth + 7) / 14) * 170; ctx.fillStyle = `hsla(${hue},70%,68%,${alpha})`; }
-      else ctx.fillStyle = p.kind === 0 ? `rgba(153,192,151,${alpha})` : p.kind === 2 ? `rgba(206,231,152,${alpha})` : `rgba(153,214,167,${alpha})`;
+      else ctx.fillStyle = p.kind === 0 ? `rgba(109,158,202,${alpha})` : p.kind === 2 ? `rgba(109,213,255,${alpha})` : `rgba(117,170,223,${alpha})`;
       const size = Math.max(.55, Math.min(1.8, p.scale / 31)) * (p.kind === 2 ? 1.12 : .82);
       ctx.beginPath(); ctx.arc(p.x, p.y, size, 0, Math.PI * 2); ctx.fill();
     }
@@ -198,7 +198,7 @@ if ('IntersectionObserver' in window) {
     ctx.strokeStyle = '#ebd09d55'; ctx.beginPath(); ctx.arc(sensor.x, sensor.y, 10, 0, Math.PI * 2); ctx.stroke();
     const origin = { x: width - 44, y: 91 };
     ctx.font = '8px monospace'; ctx.lineWidth = 1;
-    [[20,0,'X','#b6ccad'],[0,-20,'Y','#e6c38b'],[-12,12,'Z','#8aaec1']].forEach(([x,y,label,color]) => { ctx.strokeStyle=color;ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(origin.x,origin.y);ctx.lineTo(origin.x+x,origin.y+y);ctx.stroke();ctx.fillText(label,origin.x+x+3,origin.y+y+3); });
+    [[20,0,'X','#89d8ff'],[0,-20,'Y','#e6c38b'],[-12,12,'Z','#7c9cc6']].forEach(([x,y,label,color]) => { ctx.strokeStyle=color;ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(origin.x,origin.y);ctx.lineTo(origin.x+x,origin.y+y);ctx.stroke();ctx.fillText(label,origin.x+x+3,origin.y+y+3); });
   }
   function tick(time) {
     frame = 0;
@@ -229,4 +229,69 @@ if ('IntersectionObserver' in window) {
   document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); else start(); });
   motionPreference.addEventListener('change', () => { paused = motionPreference.matches; updateMotionButton(); if (paused) stop(); else start(); });
   updateMotionButton(); resize(); start();
+})();
+
+// Deterministic camera–LiDAR projection example. The UI displays computed
+// errors for this synthetic fixture, never performance claims about real work.
+(() => {
+  const canvas = document.querySelector('#calibration-canvas');
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  const yawInput = document.querySelector('#calibration-yaw');
+  const xInput = document.querySelector('#calibration-x');
+  const reference = [];
+  const focal = 460, width = 640, height = 400;
+  const project = (p) => [width / 2 + focal * p[0] / p[2], height / 2 - focal * p[1] / p[2]];
+  function line(a, b, count = 18) {
+    for (let i = 0; i <= count; i++) reference.push(a.map((v, j) => v + (b[j] - v) * i / count));
+  }
+  // Two box-like objects, with points along their structural edges.
+  function cuboid(x, y, z, w, h, d) {
+    const c = [[x,y,z],[x+w,y,z],[x+w,y+h,z],[x,y+h,z],[x,y,z+d],[x+w,y,z+d],[x+w,y+h,z+d],[x,y+h,z+d]];
+    [[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]].forEach(([a,b]) => line(c[a],c[b]));
+  }
+  cuboid(-2.4,-1.3,6.5,1.65,2.25,1.6);
+  cuboid(.75,-1.3,8,2.2,1.4,1.7);
+  // Back wall with a doorway, plus floor lines for depth context.
+  [[[-4,-1.3,12],[-4,2.5,12]],[[-4,2.5,12],[4,2.5,12]],[[4,2.5,12],[4,-1.3,12]],
+   [[-.5,-1.3,12],[-.5,1.6,12]],[[-.5,1.6,12],[.75,1.6,12]],[[.75,1.6,12],[.75,-1.3,12]]].forEach(([a,b]) => line(a,b,25));
+  for (let x = -4; x <= 4; x += 2) line([x,-1.3,5],[x,-1.3,13],18);
+  let lastError = 0;
+  function render() {
+    const ratio = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = width * ratio; canvas.height = height * ratio; ctx.setTransform(ratio,0,0,ratio,0,0);
+    ctx.fillStyle = '#0a121d'; ctx.fillRect(0,0,width,height);
+    ctx.strokeStyle = '#2d48642e'; ctx.lineWidth = 1;
+    for (let x = 0; x < width; x += 40) { ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,height);ctx.stroke(); }
+    for (let y = 0; y < height; y += 40) { ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(width,y);ctx.stroke(); }
+    const degrees = Number(yawInput.value), yaw = degrees * Math.PI / 180, tx = Number(xInput.value);
+    const sign = (value, places) => (value >= 0 ? '+' : '') + value.toFixed(places);
+    document.querySelector('#yaw-value').textContent = sign(degrees,1) + '°';
+    document.querySelector('#x-value').textContent = sign(tx,2) + ' m';
+    let error = 0;
+    for (let i = 0; i < reference.length; i++) {
+      const [x,y,z] = reference[i];
+      const a = project([x,y,z]);
+      const b = project([x*Math.cos(yaw)+z*Math.sin(yaw)+tx,y,-x*Math.sin(yaw)+z*Math.cos(yaw)]);
+      error += Math.hypot(a[0]-b[0],a[1]-b[1]);
+      if (i % 16 === 0 && Math.abs(degrees)+Math.abs(tx)>.1) {
+        ctx.strokeStyle = '#ffb36a36';ctx.lineWidth = .6;ctx.beginPath();ctx.moveTo(...a);ctx.lineTo(...b);ctx.stroke();
+      }
+      ctx.fillStyle = '#59d2ff88'; ctx.fillRect(a[0]-1,a[1]-1,2,2);
+      ctx.fillStyle = '#ffb36ade';ctx.beginPath();ctx.arc(b[0],b[1],1.25,0,Math.PI*2);ctx.fill();
+    }
+    lastError = error/reference.length;
+    const errorOutput = document.querySelector('#reprojection-error'); errorOutput.textContent = lastError.toFixed(1);
+    const aligned = lastError < .05, color = aligned ? '#59d2ff' : '#ffb36a';
+    const state = document.querySelector('#alignment-state');state.textContent = aligned ? 'ALIGNED' : 'OFFSET';state.style.color = color;state.style.borderColor = color + '70';errorOutput.style.color = color;
+    const fill = document.querySelector('#alignment-fill');fill.style.transform = `scaleX(${Math.min(lastError/160,1)})`;fill.style.background = color;
+    canvas.setAttribute('aria-label', `Synthetic camera–LiDAR projection. Yaw offset ${degrees.toFixed(1)} degrees, lateral offset ${tx.toFixed(2)} meters. Mean reprojection error ${lastError.toFixed(1)} pixels.`);
+    ctx.strokeStyle = '#93b0c56b';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(312,200);ctx.lineTo(328,200);ctx.moveTo(320,192);ctx.lineTo(320,208);ctx.stroke();
+    ctx.font='9px monospace';ctx.fillStyle='#8da7bf';ctx.fillText('u →',width-35,height-14);ctx.fillText('v ↓',12,20);
+  }
+  yawInput.addEventListener('input',render);xInput.addEventListener('input',render);
+  document.querySelector('#calibration-align').addEventListener('click',() => { yawInput.value=0;xInput.value=0;render(); });
+  document.querySelector('#calibration-reset').addEventListener('click',() => { yawInput.value=6;xInput.value=.25;render(); });
+  render();
 })();

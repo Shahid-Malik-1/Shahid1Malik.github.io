@@ -1,6 +1,6 @@
 # Shahid Malik — robotics portfolio
 
-A static GitHub Pages site covering current robotics work at Field AI, earlier
+A dark technical GitHub Pages portfolio covering current robotics work at Field AI, earlier
 computer vision projects, publications, and research at Saint Louis University.
 
 ## Preview
@@ -18,7 +18,8 @@ Open http://127.0.0.1:8765. No build or npm dependencies are required.
 
 - `index.html`: content, metadata, project links, experience and publications.
 - `portfolio.css`: responsive layout, typography, media viewer and motion preferences.
-- `portfolio.js`: project filters, media dialog, gallery and procedural canvas scene.
+- `portfolio.js`: project filters, media dialog, gallery, procedural 3D scene and
+  a camera–LiDAR calibration workbench.
 - `assets/portfolio/`: compressed WebP previews of existing portfolio images.
 - Existing root photos, videos and PDFs: full-size media and downloadable documents.
 
@@ -49,3 +50,12 @@ Browser checks covered desktop/mobile layouts (including 320px width), project
 filters, image/video dialogs, Escape dismissal, mobile navigation, gallery assets,
 scene controls and reduced motion. No page script errors or asset HTTP errors
 were observed in those checks.
+
+## Interactive sensor geometry
+
+The calibration workbench projects known synthetic 3D points through a pinhole
+camera with 460 px focal length and a 640 × 400 image frame. Yaw and lateral-offset
+controls change the LiDAR-to-camera transform. The displayed error is the mean
+Euclidean pixel distance between paired reference and adjusted projections.
+Align restores the known identity transform; it is not an optimization solver.
+This example illustrates geometry and is not a benchmark or an employer dataset.
