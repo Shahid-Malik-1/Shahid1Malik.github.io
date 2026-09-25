@@ -1,5 +1,10 @@
-"homepage": "https://github.com/Shahid1Malik/My-Website",
-"scripts": {
-  "predeploy": "npm run build",
-  "deploy": "gh-pages -d build"
+{
+  "name": "shahid-malik-portfolio",
+  "private": true,
+  "description": "Static robotics and computer vision portfolio for Shahid Shabeer Malik",
+  "homepage": "https://shahid1malik.github.io/",
+  "scripts": {
+    "start": "python3 -m http.server 8765 --bind 127.0.0.1",
+    "check": "node --check portfolio.js"
+  }
 }
